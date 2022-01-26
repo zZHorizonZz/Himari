@@ -1,2 +1,2 @@
-# Ishtar
- Ishtar is web server written in java.
+# Himari
+ Himari is web server written in java.
