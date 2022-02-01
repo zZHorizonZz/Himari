@@ -16,22 +16,17 @@
 
 package com.himari.request;
 
-import com.himari.ServerHandler;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelPipeline;
-import io.netty.handler.codec.http.HttpObjectAggregator;
-import io.netty.handler.codec.http.HttpServerCodec;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.codec.http.FullHttpRequest;
 
 
-public abstract class RequestListener extends ChannelInitializer<Channel> {
+public abstract class RequestListener extends SimpleChannelInboundHandler<FullHttpRequest> {
 
     @Override
-    protected void initChannel(Channel ch) {
-        ChannelPipeline pipeline = ch.pipeline();
-        pipeline.addLast(new HttpServerCodec());
-        pipeline.addLast(new HttpObjectAggregator(Integer.MAX_VALUE));
-        pipeline.addLast(new ServerHandler());
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, FullHttpRequest fullHttpRequest) throws Exception {
+        this.handleRequest(channelHandlerContext, fullHttpRequest);
     }
 
+    public abstract void handleRequest(ChannelHandlerContext ctx, FullHttpRequest msg);
 }

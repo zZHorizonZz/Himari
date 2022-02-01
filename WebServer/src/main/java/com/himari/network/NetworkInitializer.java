@@ -16,5 +16,8 @@
 
 package com.himari.network;
 
-public abstract class NetworkInitializer {
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelInitializer;
+
+public abstract class NetworkInitializer extends ChannelInitializer<Channel> {
 }

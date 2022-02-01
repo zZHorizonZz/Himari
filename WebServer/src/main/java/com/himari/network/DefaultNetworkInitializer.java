@@ -16,5 +16,19 @@
 
 package com.himari.network;
 
-public class DefaultNetworkInitializer {
+import com.himari.ServerHandler;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelPipeline;
+import io.netty.handler.codec.http.HttpObjectAggregator;
+import io.netty.handler.codec.http.HttpServerCodec;
+
+public class DefaultNetworkInitializer extends NetworkInitializer {
+
+    @Override
+    protected void initChannel(Channel ch) {
+        ChannelPipeline pipeline = ch.pipeline();
+        pipeline.addLast(new HttpServerCodec());
+        pipeline.addLast(new HttpObjectAggregator(Integer.MAX_VALUE));
+        pipeline.addLast(new ServerHandler());
+    }
 }

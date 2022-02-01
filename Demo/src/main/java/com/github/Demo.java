@@ -17,11 +17,13 @@
 package com.github;
 
 import com.himari.HimariServer;
+import com.himari.mapping.MappingService;
 
 public class Demo {
 
     public static void main(String[] arguments) {
         HimariServer server = new HimariServer(1048);
+        MappingService.getService().registerMapping("test", new DemoMapping());
         server.start();
     }
 }

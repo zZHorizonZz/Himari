@@ -16,13 +16,8 @@
 
 package com.himari;
 
-import com.himari.builder.component.BodyComponent;
-import com.himari.builder.component.divider.DividerComponent;
-import com.himari.builder.component.graphic.LabelComponent;
-import com.himari.builder.component.header.resources.Relationship;
-import com.himari.builder.component.header.resources.Resource;
-import com.himari.builder.page.Page;
-import com.himari.builder.page.PageFactory;
+import com.himari.mapping.MappingService;
+import com.himari.response.Response;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
@@ -34,28 +29,19 @@ public class ServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> 
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest msg) {
-        msg.headers().iterator().forEachRemaining(entry -> System.out.println("Entry: " + entry.getKey() + "  " + entry.getValue()));
-        BodyComponent body = new BodyComponent();
-        DividerComponent div = new DividerComponent();
-        body.appendComponent(div);
-        div.appendComponent(new LabelComponent("Test text"));
+        System.out.println("Channel name: " + ctx.name());
+        Response<String> stringResponse = (Response<String>) MappingService.getService().route(msg.method(), msg.uri());
 
-        div.setIdentifier("test");
-
-        Page page = new Page("Test title....");
-        page.getResourceList().add(new Resource("test.css", Relationship.STYLESHEET));
-        page.setPageBody(body);
-
-        PageFactory pageFactory = new PageFactory(page);
-        String output = pageFactory.createHtml();
-
-        System.out.println("Output: \n" + output);
-
-        ByteBuf content = Unpooled.copiedBuffer(output, CharsetUtil.UTF_8);
+        ByteBuf content = Unpooled.copiedBuffer(stringResponse.getResponse(), CharsetUtil.UTF_8);
         FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, content);
         response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/html");
         response.headers().set(HttpHeaderNames.CONTENT_LENGTH, content.readableBytes());
         ctx.write(response);
         ctx.flush();
+
+       /* if (HttpUtil.is100ContinueExpected(msg)) {
+            ctx.writeAndFlush(new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.CONTINUE));
+            return;
+        }*/
     }
 }

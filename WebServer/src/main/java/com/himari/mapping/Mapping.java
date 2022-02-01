@@ -16,7 +16,9 @@
 
 package com.himari.mapping;
 
-public interface Mapping {
+import com.himari.response.Response;
 
-    String handle();
+public interface Mapping<T> {
+
+    Response<T> handle();
 }

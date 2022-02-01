@@ -1,5 +1,5 @@
 /*
- * Copyright (c)  2021 Daniel Fiala
+ * Copyright (c)  2022 Daniel Fiala
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.himari.request;
+package com.github;
 
 import com.himari.builder.component.BodyComponent;
 import com.himari.builder.component.divider.DividerComponent;
@@ -23,18 +23,13 @@ import com.himari.builder.component.header.resources.Relationship;
 import com.himari.builder.component.header.resources.Resource;
 import com.himari.builder.page.Page;
 import com.himari.builder.page.PageFactory;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.http.*;
-import io.netty.util.CharsetUtil;
+import com.himari.mapping.Mapping;
+import com.himari.response.Response;
 
-public class DefaultRequestListener extends RequestListener {
+public class DemoMapping implements Mapping<String> {
 
     @Override
-    public void handleRequest(ChannelHandlerContext ctx, FullHttpRequest msg) {
-        System.out.println("Channel name: " + ctx.name());
-        msg.headers().iterator().forEachRemaining(entry -> System.out.println("Entry: " + entry.getKey() + "  " + entry.getValue()));
+    public Response<String> handle() {
         BodyComponent body = new BodyComponent();
         DividerComponent div = new DividerComponent();
         body.appendComponent(div);
@@ -48,14 +43,6 @@ public class DefaultRequestListener extends RequestListener {
 
         PageFactory pageFactory = new PageFactory(page);
         String output = pageFactory.createHtml();
-
-        System.out.println("Output: \n" + output);
-
-        ByteBuf content = Unpooled.copiedBuffer(output, CharsetUtil.UTF_8);
-        FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, content);
-        response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/html");
-        response.headers().set(HttpHeaderNames.CONTENT_LENGTH, content.readableBytes());
-        ctx.write(response);
-        ctx.flush();
+        return new Response<>(output);
     }
 }
