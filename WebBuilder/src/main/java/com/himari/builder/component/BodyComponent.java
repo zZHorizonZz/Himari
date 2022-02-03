@@ -16,16 +16,14 @@
 
 package com.himari.builder.component;
 
-import com.himari.builder.flag.Attribute;
 import com.himari.builder.flag.AttributeContainer;
 import com.himari.builder.style.StyleAttributeContainer;
-import com.himari.builder.style.styles.MarginStyle;
-import org.jetbrains.annotations.Nullable;
+import com.himari.builder.style.styles.MarginStyleElement;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class BodyComponent implements ExpandableComponent, MarginStyle {
+public class BodyComponent implements ExpandableComponent, MarginStyleElement {
 
     private final List<Component> components = new LinkedList<>();
     private final AttributeContainer flagContainer = new AttributeContainer();

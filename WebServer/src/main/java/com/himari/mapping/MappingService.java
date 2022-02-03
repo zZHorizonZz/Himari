@@ -28,8 +28,24 @@ public final class MappingService {
 
     public Response<?> route(HttpMethod method, String url) {
         QueryStringDecoder decoder = new QueryStringDecoder(url);
-        System.out.println("Uri: " + decoder.uri());
-        return container.findMapping("test").handle();
+        Mapping<?> mapping = container.findMapping(decoder.uri());
+
+        System.out.println("Routing: " + decoder.uri());
+
+        if (mapping == null) {
+            Mapping<?> defaultMapping = container.findMapping("/");
+            if (defaultMapping == null) {
+                System.out.println("Empty response.");
+                return Response.EMPTY_RESPONSE;
+            }
+
+            System.out.println("Default value is valid.");
+            return defaultMapping.handle();
+        }
+
+        System.out.println("Mapped value is valid.");
+        System.out.println("Value: " + mapping.handle().getResponse());
+        return mapping.handle();
     }
 
     public boolean registerMapping(String path, Mapping<?> mapping) {
@@ -38,7 +54,6 @@ public final class MappingService {
         }
 
         container.addMapping(path, mapping);
-        System.out.println("Path: " + path);
         return true;
     }
 

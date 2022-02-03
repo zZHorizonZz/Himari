@@ -21,16 +21,19 @@ import com.himari.builder.component.ComponentType;
 import com.himari.builder.component.ExpandableComponent;
 import com.himari.builder.flag.Attribute;
 import com.himari.builder.flag.AttributeContainer;
+import com.himari.builder.style.StyleAttributeContainer;
+import com.himari.builder.style.styles.ColorStyleElement;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class DividerComponent implements ExpandableComponent {
+public class DividerComponent implements ExpandableComponent, ColorStyleElement {
 
     private String identifier;
 
     private final List<Component> components = new LinkedList<>();
     private final AttributeContainer flagContainer = new AttributeContainer();
+    private final StyleAttributeContainer styleAttributeContainer = new StyleAttributeContainer();
 
     @Override
     public ComponentType getType() {
@@ -109,5 +112,10 @@ public class DividerComponent implements ExpandableComponent {
     @Override
     public Set<Component> findComponentsByIdentifier(String identifier) {
         return components.parallelStream().filter(component -> component.getIdentifier().equals(identifier)).collect(Collectors.toUnmodifiableSet());
+    }
+
+    @Override
+    public StyleAttributeContainer getStyleContainer() {
+        return styleAttributeContainer;
     }
 }

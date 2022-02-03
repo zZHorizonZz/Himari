@@ -18,43 +18,30 @@ package com.himari.builder;
 
 import com.himari.builder.component.Component;
 import com.himari.builder.component.ExpandableComponent;
-import com.himari.builder.component.graphic.GraphicComponent;
-import com.himari.builder.flag.AttributeFactory;
+import com.himari.builder.style.StyleFactory;
+import com.himari.builder.style.styles.StyleElement;
 
 public record StylesheetFactory(Component component) {
 
     public String create() {
-        if (component == null) {
+        if (component == null || !(component instanceof StyleElement)) {
             return "";
         }
 
-        return evaluateComponent(component, 1, 128);
+        return evaluateComponent(component);
     }
 
-    private String evaluateComponent(Component component, int currentDepth, int maxDepth) {
+    private String evaluateComponent(Component component) {
         StringBuilder builder = new StringBuilder();
-        builder.append(component.getType().getTag());
-        if (component.getFlagContainer().size() > 0) {
-            builder.append(" ").append(new AttributeFactory(component.getFlagContainer().getAttributesAsSet()).create());
+        if (component instanceof StyleElement styleable) {
+            if (styleable.getStyleContainer().size() > 0) {
+                builder.append(new StyleFactory(component, styleable.getStyleContainer().getStyleAttributesAsSet(), component.hasIdentifier()).create());
+                builder.append("\n");
+            }
         }
-
-        builder.append(">");
 
         if (component instanceof ExpandableComponent expandableComponent) {
-            expandableComponent.iterator().forEachRemaining(childComponent -> {
-                if (currentDepth < maxDepth) {
-                    builder.append("\n");
-                    builder.append("\t".repeat(Math.max(0, currentDepth)));
-                    builder.append(evaluateComponent(childComponent, currentDepth + 1, maxDepth));
-                }
-            });
-        }
-
-        if (component instanceof GraphicComponent graphicComponent) {
-            builder.append(graphicComponent.getValue());
-        } else {
-            builder.append("\n");
-            builder.append("\t".repeat(Math.max(0, currentDepth - 1)));
+            expandableComponent.getComponents().forEach(comp -> builder.append(evaluateComponent(comp)));
         }
 
         return builder.toString();

@@ -20,7 +20,7 @@ import com.himari.builder.style.StyleAttributeContainer;
 import com.himari.builder.style.StyleAttribute;
 import org.jetbrains.annotations.Nullable;
 
-public interface Style {
+public interface StyleElement {
 
     StyleAttributeContainer getStyleContainer();
 

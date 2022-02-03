@@ -17,13 +17,32 @@
 package com.github;
 
 import com.himari.HimariServer;
-import com.himari.mapping.MappingService;
+import com.himari.builder.PageMapping;
+import com.himari.builder.component.BodyComponent;
+import com.himari.builder.component.divider.DividerComponent;
+import com.himari.builder.component.graphic.LabelComponent;
+import com.himari.builder.component.header.resources.Relationship;
+import com.himari.builder.component.header.resources.Resource;
+import com.himari.builder.page.Page;
 
 public class Demo {
 
     public static void main(String[] arguments) {
         HimariServer server = new HimariServer(1048);
-        MappingService.getService().registerMapping("test", new DemoMapping());
+
+        BodyComponent body = new BodyComponent();
+        DividerComponent div = new DividerComponent();
+        div.setBackgroundColor("rgb(0, 0, 139)");
+        body.appendComponent(div);
+        div.appendComponent(new LabelComponent("Test text"));
+
+        div.setIdentifier("test");
+
+        Page page = new Page("Test title....");
+        page.getResourceList().add(new Resource("/page/style.css", Relationship.STYLESHEET, "test/css"));
+        page.setPageBody(body);
+
+        PageMapping mapping = new PageMapping(page, "/page");
         server.start();
     }
 }

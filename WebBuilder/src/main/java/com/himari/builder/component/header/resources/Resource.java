@@ -20,6 +20,8 @@ import com.himari.builder.component.Component;
 import com.himari.builder.component.ComponentType;
 import com.himari.builder.flag.AttributeContainer;
 
+import java.awt.*;
+
 public class Resource implements Component {
 
     private final AttributeContainer flagContainer = new AttributeContainer();
@@ -40,12 +42,18 @@ public class Resource implements Component {
 
     public Resource(String reference, String mediaType) {
         this(reference);
-        this.mediaType = mediaType;
+        setMediaType(mediaType);
     }
 
     public Resource(String reference, Relationship relationship) {
         this(reference);
-        this.relationship = relationship;
+        setRelationship(relationship);
+    }
+
+    public Resource(String reference, Relationship relationship, String mediaType) {
+        this(reference);
+        setRelationship(relationship);
+        setMediaType(mediaType);
     }
 
     public String getReference() {

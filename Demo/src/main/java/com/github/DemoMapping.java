@@ -32,13 +32,14 @@ public class DemoMapping implements Mapping<String> {
     public Response<String> handle() {
         BodyComponent body = new BodyComponent();
         DividerComponent div = new DividerComponent();
+        div.setBackgroundColor("rgb(0, 0, 139)");
         body.appendComponent(div);
         div.appendComponent(new LabelComponent("Test text"));
 
         div.setIdentifier("test");
 
         Page page = new Page("Test title....");
-        page.getResourceList().add(new Resource("test.css", Relationship.STYLESHEET));
+        page.getResourceList().add(new Resource("style.css", Relationship.STYLESHEET));
         page.setPageBody(body);
 
         PageFactory pageFactory = new PageFactory(page);

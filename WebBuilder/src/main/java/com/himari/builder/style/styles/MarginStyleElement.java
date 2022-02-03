@@ -18,7 +18,7 @@ package com.himari.builder.style.styles;
 
 import com.himari.builder.style.StyleAttribute;
 
-public interface MarginStyle extends Style {
+public interface MarginStyleElement extends StyleElement {
 
     default void setMargin(int margin) {
         getStyleContainer().addStyleAttribute(new StyleAttribute<>("margin", margin));

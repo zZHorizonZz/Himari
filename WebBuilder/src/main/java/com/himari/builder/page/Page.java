@@ -17,7 +17,9 @@
 package com.himari.builder.page;
 
 import com.himari.builder.component.BodyComponent;
+import com.himari.builder.component.header.resources.Relationship;
 import com.himari.builder.component.header.resources.Resource;
+import com.himari.builder.style.styles.StyleElement;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -38,6 +40,10 @@ public class Page {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void addStyle(StyleElement styleElement) {
+        resourceList.add(new Resource("/" + styleElement.getClass().getSimpleName() + ".css", Relationship.STYLESHEET));
     }
 
     public List<Resource> getResourceList() {

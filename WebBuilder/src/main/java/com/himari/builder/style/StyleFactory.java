@@ -23,11 +23,16 @@ import java.util.Set;
 public record StyleFactory(Component component, Set<StyleAttribute<?>> style, boolean global) {
 
     public String create() {
-        StringBuilder flagBuilder = new StringBuilder(global ? component.getType().getTag() : component.getIdentifier() + " {\n");
+        if (style.size() == 0) {
+            return "";
+        }
+
+        StringBuilder flagBuilder = new StringBuilder((global ? component.getType().getTag() : component.getIdentifier()) + " {\n");
+        System.out.println("Is global: " + global + " Identifier: " + component.getType().getTag());
         int index = 0;
         for (StyleAttribute<?> flag : style) {
             index++;
-            flagBuilder.append(flag.getName()).append(":").append(flag.getValue()).append(";").append(index < style.size() ? "\n" : "");
+            flagBuilder.append("    ").append(flag.getName()).append(": ").append(flag.getValue()).append(";").append(index < style.size() ? "\n" : "");
         }
 
         flagBuilder.append("\n}");

@@ -17,6 +17,7 @@
 package com.himari.builder.page;
 
 import com.himari.builder.HtmlFactory;
+import com.himari.builder.StylesheetFactory;
 import com.himari.builder.component.HtmlComponent;
 import com.himari.builder.component.header.HeaderComponent;
 
@@ -49,6 +50,13 @@ public class PageFactory {
         this.html = pageBuilder.toString();
 
         return this.html;
+    }
+
+    public String createStyleSheet() {
+        StylesheetFactory stylesheetFactory = new StylesheetFactory(page.getPageBody());
+        this.stylesheet = stylesheetFactory.create();
+
+        return this.stylesheet;
     }
 
     public Page getPage() {

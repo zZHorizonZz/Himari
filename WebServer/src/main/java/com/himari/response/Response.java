@@ -25,6 +25,8 @@ import java.util.concurrent.TimeoutException;
 
 public class Response<T> implements Future<T> {
 
+    public static Response<String> EMPTY_RESPONSE = new Response<>("");
+
     private T response;
 
     public Response(T response) {
